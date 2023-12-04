@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -27,14 +28,26 @@ public class AppareilService {
 
     }
 
-    public void updateApp( Appareil app){
+    public void updateApp(Long id, Appareil appInfo) {
+        Optional<Appareil> optionalAppareil = appareilRepository.findById(id);
+
+        if (optionalAppareil.isPresent()) {
+            Appareil appareil = optionalAppareil.get();
+            appareil.setState(appInfo.isState());
+            appareilRepository.save(appareil);
+        } else {
+            throw new NoSuchElementException("Appareil not found with id: " + id);
+        }
+    }
+
+    public void updateAll( boolean state){
         List<Appareil> appareilList =appareilRepository.findAll();
         for (Appareil appareil:appareilList) {
-            appareil.setState(app.isState());
+            appareil.setState(state);
             appareilRepository.save(appareil);
         }
-
     }
+
 
     public Optional<Appareil> findById(Long id) {
         return appareilRepository.findById(id);

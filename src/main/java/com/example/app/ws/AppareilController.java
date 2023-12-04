@@ -32,14 +32,19 @@ public class AppareilController {
     }
 
 
-
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         appareilService.deleteById(id);
     }
 
-    @PutMapping("/update")
-    public void updateApp(@RequestBody Appareil app) {
-        appareilService.updateApp(app);
+    @PutMapping("/switch/{id}")
+    public void updateApp(@PathVariable Long id,@RequestBody Appareil app) {
+        appareilService.updateApp(id, app);
+    }
+
+    @GetMapping("/switch/state/{state}")
+    public void updateAll(@PathVariable boolean state) {
+        appareilService.updateAll(state);
     }
 }
+
